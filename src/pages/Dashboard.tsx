@@ -1,21 +1,5 @@
-import { useState } from 'react'
-import { DashboardSkeleton } from '../components/SkeletonLoader'
+import { Link } from 'react-router-dom'
 
-/**
- * Dashboard Page
- *
- * Displays key metrics and quick actions for revenue management.
- * Implements loading skeleton for improved perceived performance.
- *
- * Accessibility:
- * - aria-busy attribute on loading states
- * - Semantic heading hierarchy
- * - Loading state announced to screen readers via role="status"
- *
- * Responsive:
- * - Metrics grid adapts to viewport width
- * - Mobile-optimized padding and spacing
- */
 export default function Dashboard() {
   // Simulated loading state - in production, this would be driven by data fetching
   const [isLoading] = useState(false)
@@ -25,60 +9,52 @@ export default function Dashboard() {
   }
 
   return (
-    <div>
-      <h1 style={{ marginTop: 0 }}>Dashboard</h1>
-      <p style={{ color: 'var(--muted)' }}>
-        Connect your revenue sources and manage attestations from here.
-      </p>
+    <section className="app-page">
+      <header className="page-header">
+        <p className="page-eyebrow">Revenue integrity</p>
+        <h1 className="page-title">Dashboard</h1>
+        <p className="page-description">
+          Connect your revenue sources, manage permissions, and prepare every attestation run
+          from one place.
+        </p>
+      </header>
 
-      {/* Metrics Section */}
-      <section
-        style={{
-          marginTop: '2rem',
-          padding: '1.5rem',
-          background: 'var(--surface)',
-          borderRadius: 8,
-          border: '1px solid var(--border)',
-        }}
-      >
-        <h2 style={{ marginTop: 0, fontSize: '1rem' }}>Key Metrics</h2>
-
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1.5rem',
-            marginBottom: '2rem',
-          }}
-        >
-          {/* Sample metric cards */}
-          {[
-            { label: 'Monthly Revenue', value: '$12,345' },
-            { label: 'Attestations', value: '24' },
-            { label: 'Connected Sources', value: '3' },
-            { label: 'Last Updated', value: 'Today' },
-          ].map((metric, idx) => (
-            <div key={idx} style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--muted)', marginBottom: '0.5rem' }}>
-                {metric.label}
-              </span>
-              <span style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--accent)' }}>
-                {metric.value}
-              </span>
-            </div>
-          ))}
+      <section className="dashboard-hero app-card">
+        <div>
+          <p className="dashboard-kicker">New flow</p>
+          <h2>Connect a source with clearer milestones and safer defaults</h2>
+          <p>
+            The new four-step wizard adds a progress header, step-level validation, and
+            readable permission summaries before anyone grants access.
+          </p>
         </div>
-
-        {/* Quick actions section */}
-        <div style={{ paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
-          <h3 style={{ marginTop: 0, fontSize: '1rem' }}>Quick actions</h3>
-          <ul style={{ color: 'var(--muted)', margin: 0, paddingLeft: '1.5rem' }}>
-            <li>Connect Stripe, Razorpay, or Shopify (coming soon)</li>
-            <li>Trigger monthly revenue report</li>
-            <li>View attestation history</li>
-          </ul>
+        <div className="dashboard-hero-actions">
+          <Link to="/connect-source/provider" className="app-button app-button-primary">
+            Open connect source wizard
+          </Link>
+          <p className="dashboard-meta">Works for Stripe, Shopify, and Razorpay connection flows.</p>
         </div>
       </section>
-    </div>
+
+      <div className="dashboard-grid">
+        <section className="app-card dashboard-card">
+          <h2>Connection empty state</h2>
+          <p>
+            No revenue sources are connected yet. Start with a provider that owns the primary
+            payout stream so attestations can inherit the cleanest baseline data.
+          </p>
+        </section>
+
+        <section className="app-card dashboard-card">
+          <h2>Review checklist</h2>
+          <ul className="dashboard-list">
+            <li>Provider selected before authorization language appears</li>
+            <li>Next stays disabled until authorization returns successfully</li>
+            <li>Scope errors surface inline without relying on color alone</li>
+            <li>Final confirmation restates read-only access before completion</li>
+          </ul>
+        </section>
+      </div>
+    </section>
   )
 }
