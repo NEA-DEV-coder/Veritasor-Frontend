@@ -62,17 +62,17 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
           background: 'var(--surface)',
         }}
       >
-        <Link to="/" style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)' }}>
+        <Link
+          to="/"
+          className="focus-ring"
+          style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)' }}
+        >
           Veritasor
         </Link>
-        {/* Primary navigation landmark; aria-label names it for assistive tech. */}
-        <nav
-          aria-label="Primary"
-          style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
-        >
-          <Link to="/">Dashboard</Link>
-          <Link to="/attestations">Attestations</Link>
-          <Link to="/login">Login</Link>
+        <nav style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <Link to="/" className="focus-ring">Dashboard</Link>
+          <Link to="/attestations" className="focus-ring">Attestations</Link>
+          <Link to="/login" className="focus-ring">Login</Link>
         </nav>
       </aside>
       {/*
