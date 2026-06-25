@@ -6,9 +6,8 @@ import RevenueSources from './pages/RevenueSources'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ForgotPassword from './pages/ForgotPassword'
-import Settings from './pages/Settings'
-import NotFound from './pages/NotFound'
 import OnboardingWizard from './pages/OnboardingWizard'
+import NotFound from './pages/NotFound'
 import {
   ConnectSourceWizard,
   SelectSourceProviderStep,

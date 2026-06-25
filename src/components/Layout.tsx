@@ -1,20 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 import TopAppBar from './TopAppBar'
-import { ToastProvider, useToast } from './ToastContext'
+import { ToastProvider, useToast, Toast } from './ToastContext'
+import CommandPalette from './CommandPalette'
 
-function ToastItem({ toast, onRemove }: { toast: { id: string; type: string; message: string; duration?: number }; onRemove: (id: string) => void }) {
+export function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
+  const isAlert = toast.type === 'error' || toast.type === 'warning'
   return (
     <div
-      role={toast.type === 'error' || toast.type === 'warning' ? 'alert' : 'status'}
       className={`toast toast-${toast.type}`}
+      role={isAlert ? 'alert' : 'status'}
     >
-      <span>{toast.message}</span>
+      <span className="toast-message">{toast.message}</span>
       <button
         type="button"
+        className="toast-close"
         aria-label="Close notification"
         onClick={() => onRemove(toast.id)}
-        style={{ marginLeft: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit' }}
       >
         ✕
       </button>
@@ -24,8 +26,13 @@ function ToastItem({ toast, onRemove }: { toast: { id: string; type: string; mes
 
 function ToastContainer() {
   const { toasts, removeToast } = useToast()
+
   return (
-    <div aria-live="polite" aria-atomic="true" className="toast-container">
+    <div
+      aria-live="polite"
+      aria-atomic="true"
+      className="toast-container"
+    >
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
       ))}
@@ -35,6 +42,18 @@ function ToastContainer() {
 
 function LayoutInner() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.key === 'k' || e.key === 'K') && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault()
+        setPaletteOpen((open) => !open)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   function toggleSidebar() {
     setSidebarOpen((o) => !o)
@@ -53,6 +72,7 @@ function LayoutInner() {
       <TopAppBar
         onSidebarToggle={toggleSidebar}
         sidebarOpen={sidebarOpen}
+        onSearchClick={() => setPaletteOpen(true)}
       />
 
       <div className="app-body">
@@ -88,6 +108,7 @@ function LayoutInner() {
       </div>
 
       <ToastContainer />
+      <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   )
 }
