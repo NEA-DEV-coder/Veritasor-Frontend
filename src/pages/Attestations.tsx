@@ -9,8 +9,7 @@ type AttestationListItem = {
   merkleRoot: string;
 };
 
-const STATUS_META: Record<
-  AttestationStatus,
+const DEMO_ATTESTATIONS: AttestationListItem[] = [
   {
     label: string;
     background: string;
@@ -51,6 +50,17 @@ const STATUS_META: Record<
       </svg>
     ),
   },
+  {
+    id: 'att-002',
+    status: 'pending',
+    createdAt: '2026-06-01T09:10:00Z',
+    merkleRoot: '0xb2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3',
+    source: 'Stripe (live)',
+    amount: '$42,150.00',
+  },
+]
+
+const STATUS_STYLE: Record<AttestationStatus, { background: string; color: string; border: string }> = {
   verified: {
     label: "Verified",
     background: "var(--success-soft)",
@@ -384,11 +394,45 @@ export default function Attestations() {
               }}
             />
             {attestations.map((item) => (
-              <TimelineRow key={item.id} item={item} />
+              <div
+                key={item.id}
+                role="row"
+                style={{
+                  display: 'flex',
+                  gap: '1rem',
+                  padding: '0.75rem 0',
+                  borderTop: '1px solid var(--border)',
+                  alignItems: 'center',
+                }}
+              >
+                <div role="cell" style={{ flex: '0 0 120px' }}>
+                  <StatusBadge status={item.status} />
+                </div>
+                <div role="cell" style={{ flex: '0 0 200px', color: 'var(--muted)', fontSize: '0.9rem' }}>
+                  <time dateTime={item.createdAt}>
+                    {new Intl.DateTimeFormat(undefined, {
+                      year: 'numeric',
+                      month: 'short',
+                      day: '2-digit',
+                    }).format(new Date(item.createdAt))}
+                  </time>
+                </div>
+                <div role="cell" style={{ flex: '1 1 auto', fontFamily: 'monospace', fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {middleEllipsis(item.merkleRoot)}
+                </div>
+                <div role="cell" style={{ flex: '0 0 120px', color: 'var(--muted)' }}>
+                  {item.amount}
+                </div>
+                <div role="cell" style={{ flex: '0 0 80px' }}>
+                  <a href={`/attestations/${item.id}`} style={{ color: 'var(--accent)', fontSize: '0.85rem' }}>
+                    View
+                  </a>
+                </div>
+              </div>
             ))}
-          </ol>
-        </section>
-      )}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

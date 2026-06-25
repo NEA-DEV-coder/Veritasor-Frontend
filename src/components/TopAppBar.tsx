@@ -21,6 +21,7 @@ export default function TopAppBar({
   userInitials = "JA",
   onSidebarToggle,
   sidebarOpen = false,
+  onSearchClick,
 }: TopAppBarProps) {
   const [workspace, setWorkspace] = useState(initialWorkspace);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -238,6 +239,17 @@ export default function TopAppBar({
             </ul>
           )}
         </div>
+
+        <button
+          type="button"
+          className="app-bar-search-trigger"
+          aria-label="Search or type command"
+          onClick={onSearchClick}
+        >
+          <span aria-hidden="true" className="search-icon">🔍</span>
+          <span className="search-placeholder">Search...</span>
+          <kbd className="search-kbd">Ctrl K</kbd>
+        </button>
 
         <div className="app-bar-actions">
           <DensityToggle workspace={workspace} />
